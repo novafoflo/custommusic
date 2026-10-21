@@ -1,6 +1,6 @@
 {
-  "key.custommusic.next": "Musique suivante",
-  "key.custommusic.pause": "Pause / Reprendre",
+  "key.custommusic.next": "Next track",
+  "key.custommusic.pause": "Pause / Resume",
   "key.categories.custommusic": "Custom Music",
-  "key.custommusic.menu": "Ouvrir le menu musique"
+  "key.custommusic.menu": "Open music menu"
 }
