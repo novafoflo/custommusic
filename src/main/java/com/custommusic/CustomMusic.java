@@ -20,6 +20,7 @@ import java.nio.file.Path;
 public class CustomMusic {
     private static final KeyMapping NEXT = new KeyMapping("key.custommusic.next", GLFW.GLFW_KEY_N, "key.categories.custommusic");
     private static final KeyMapping PAUSE = new KeyMapping("key.custommusic.pause", GLFW.GLFW_KEY_M, "key.categories.custommusic");
+    private static final KeyMapping MENU = new KeyMapping("key.custommusic.menu", GLFW.GLFW_KEY_K, "key.categories.custommusic");
     private final MusicPlayer player;
 
     public CustomMusic(IEventBus modBus) {
@@ -30,6 +31,7 @@ public class CustomMusic {
         modBus.addListener((RegisterKeyMappingsEvent e) -> {
             e.register(NEXT);
             e.register(PAUSE);
+            e.register(MENU);
         });
         NeoForge.EVENT_BUS.addListener(this::onTick);
 
@@ -45,6 +47,9 @@ public class CustomMusic {
         double music = mc.options.getSoundSourceVolume(SoundSource.MUSIC);
         player.setVolume((float) (master * music));
 
+        while (MENU.consumeClick()) {
+            if (mc.screen == null) mc.setScreen(new MusicScreen(player));
+        }
         while (NEXT.consumeClick()) {
             player.next();
             msg(mc, "§a♪ " + player.currentName());
