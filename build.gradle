@@ -11,15 +11,24 @@ repositories { mavenCentral() }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
+configurations {
+    shade
+    implementation.extendsFrom shade
+}
+
 neoForge {
     version = '21.1.172'
     runs { client { client() } }
     mods { custommusic { sourceSet sourceSets.main } }
 }
 
-jarJar.enable()
-
 dependencies {
-    implementation 'javazoom:jlayer:1.0.1'
-    jarJar(implementation('javazoom:jlayer:[1.0.1,1.1)'))
+    shade 'javazoom:jlayer:1.0.1'
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.shade.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
