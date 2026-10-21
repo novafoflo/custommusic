@@ -16,6 +16,7 @@ public class MusicPlayer {
     private volatile boolean skip = false;
     private volatile boolean running = true;
     private volatile String current = "";
+    private volatile Path requested = null;
     private Thread thread;
 
     public MusicPlayer(Path dir) { this.dir = dir; }
@@ -25,12 +26,19 @@ public class MusicPlayer {
     public void togglePause() { paused = !paused; }
     public boolean isPaused() { return paused; }
     public String currentName() { return current; }
+    public void playNow(Path p) { requested = p; skip = true; paused = false; }
     public void shutdown() { running = false; skip = true; }
 
     public void start() {
         thread = new Thread(this::loop, "CustomMusic-Player");
         thread.setDaemon(true);
         thread.start();
+    }
+
+    public List<Path> list() {
+        List<Path> l = new ArrayList<>(scan());
+        l.sort(Comparator.comparing(x -> x.getFileName().toString().toLowerCase()));
+        return l;
     }
 
     private List<Path> scan() {
@@ -44,13 +52,18 @@ public class MusicPlayer {
     private void loop() {
         Deque<Path> queue = new ArrayDeque<>();
         while (running) {
-            if (queue.isEmpty()) {
-                List<Path> files = scan();
-                if (files.isEmpty()) { sleep(3000); continue; }
-                Collections.shuffle(files);
-                queue.addAll(files);
+            Path p = requested;
+            if (p != null) {
+                requested = null;
+            } else {
+                if (queue.isEmpty()) {
+                    List<Path> files = scan();
+                    if (files.isEmpty()) { sleep(3000); continue; }
+                    Collections.shuffle(files);
+                    queue.addAll(files);
+                }
+                p = queue.poll();
             }
-            Path p = queue.poll();
             current = p.getFileName().toString().replaceFirst("(?i)\\.mp3$", "");
             try { play(p); } catch (Throwable t) { t.printStackTrace(); sleep(500); }
         }
