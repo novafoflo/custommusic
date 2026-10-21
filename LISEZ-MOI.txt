@@ -1,0 +1,11 @@
+Custom Music - NeoForge 1.21.1 (NeoForge 21.1.x)
+
+COMPILER (Java 21 + Gradle 8.8+ requis, internet requis) :
+  gradle build
+Le mod est genere dans : build/libs/custommusic-1.0.0.jar
+
+INSTALLER :
+  Copie le .jar dans  .minecraft/mods/  (profil NeoForge 1.21.1)
+  Mets tes .mp3 dans  .minecraft/custom_music/  (dossier cree au 1er lancement)
+
+TOUCHES : N = piste suivante, M = pause/reprise

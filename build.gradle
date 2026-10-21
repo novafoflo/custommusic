@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev' version '1.0.21'
+}
+
+version = '1.0.0'
+group = 'com.custommusic'
+base { archivesName = 'custommusic' }
+
+repositories { mavenCentral() }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = '21.1.172'
+    runs { client { client() } }
+    mods { custommusic { sourceSet sourceSets.main } }
+}
+
+jarJar.enable()
+
+dependencies {
+    implementation 'javazoom:jlayer:1.0.1'
+    jarJar(implementation('javazoom:jlayer:[1.0.1,1.1)'))
+}
